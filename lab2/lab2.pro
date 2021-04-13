@@ -5,7 +5,9 @@ CONFIG -= qt
 
 SOURCES += \
         getTables.cpp \
+        interpolation.cpp \
         main.cpp
 
 HEADERS += \
-    getTables.h
+    getTables.h \
+    interpolation.h
