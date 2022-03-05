@@ -7,6 +7,8 @@
 
 using namespace std;
 
+void plot(vector<double>, int);
+
 struct Params
 {
     double K; double M; double P;
@@ -20,7 +22,7 @@ struct Coefs
 
 static vector<double> TLTable, LTable, TKTable, KTable;
 static vector<double> TFPlot, TAlphaPlot, TF0Plot;
-static double eps1 = 0.1, eps2 = 0.1;
+static double eps1 = 1e-3, eps2 = 1e-3;
 
 double p(const double kf, const double T)
 {
@@ -135,7 +137,7 @@ bool isBalanceEnergy(const vector<double> T, const int N,
     return res;
 }
 
-vector<double> progonka(Coefs c, Params p0, Params pN)
+vector<double> getY(Coefs c, Params p0, Params pN)
 {
     int n = c.A.size();
     vector<double> xi, eta;
@@ -184,7 +186,7 @@ int main()
     getParamsN(pN, T, N, kf, T0, h, alpha);
     getCoefs(T, N, c, kf, T0, h);
 
-    vector<double> Tres = progonka(c, p0, pN);
+    vector<double> Tres = getY(c, p0, pN);
 
     int num = 0;
     for (int i = 0; i < 100 && isTemperature(T, Tres, N) && isBalanceEnergy(T, N, kf, F0, alpha, T0, h); i++) {
@@ -194,7 +196,10 @@ int main()
         getParamsN(pN, T, N, kf, T0, h, alpha);
         getCoefs(T, N, c, kf, T0, h);
 
-        Tres = add(T, alpha * (sub(progonka(c, p0, pN), T)));
+        for (int i = N - 1; i >= 0; i--) {
+            Tres[i] = T[i] + alpha * ((getY(c, p0, pN))[i] - T[i]);
+        }
+
         num = i;
     }
 

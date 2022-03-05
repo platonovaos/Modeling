@@ -6,7 +6,7 @@
 
 using namespace std;
 
-const double h = 1e-5;
+const double h = 1e-6;
 
 void tableOutput(const int numPoints, const double *x,
                 const yPicard yp, const double *yEuler, const double *yRK);
@@ -46,7 +46,7 @@ void tableOutput(const int numPoints, const double *x,
     cout << "   X   |  Пикар 1 |  Пикар 2 |  Пикар 3 |  Пикар 4 |   Эйлер  | Рунге-Кутта " << endl;
     cout << "----------------------------------------------------------------------------" << endl;
 
-    for (int i = 0; i < numPoints; i += 5000) {
+    for (int i = 0; i < numPoints; i += 50000) {
         cout << fixed << setprecision(4) << x[i] << " |  ";
 
         cout << fixed << setprecision(4) << yp.y1[i] << "  |  ";
